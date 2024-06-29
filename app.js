@@ -9,8 +9,6 @@ app.get("/",(req,res) => {
     res.send("this is the first page");
 });
 
-app.use()
-
 app.use(helmet());
 app.use(Error);
 
