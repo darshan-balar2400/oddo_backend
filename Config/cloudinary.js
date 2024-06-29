@@ -10,14 +10,23 @@ cloudinary.config({
     secure: true,
 });
 
-const uploadOnCloudinary = async (localFilePath, courseName, subjectName) => {
+const uploadOnCloudinary = async (localFilePath) => {
     try {
+        if (!localFilePath) {
+            throw new Error("No file provided");
+        }
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "");
+        const response = await cloudinary.uploader.upload(localFilePath, {
+            resource_type: "image",
+            use_filename: true,
+            unique_filename: false,
+            public_id: timestamp
+        });
         fs.unlinkSync(localFilePath);
-return response.url;
+        return response.url;
     } catch (error) {
-    console.error("Upload to Cloudinary failed:", error);
-    throw error;
-}
+        console.error("Upload to Cloudinary failed:", error);
+        throw error;
+    }
 };
-
 module.exports = { uploadOnCloudinary };

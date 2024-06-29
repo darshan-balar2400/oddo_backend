@@ -6,6 +6,8 @@ const {
     DeleteProduct,
     GetProducts
 } = require("../Controllers/ProductsController");
+const multer = require("multer");
+const uploadDest = multer({ dest: "uploads/" });
 
 const Auth = require("../Middleware/Auth");
 
@@ -16,7 +18,7 @@ const route = new express.Router();
 route.get("/products",GetProducts);
 /* ----------------------------------------------- POST ROUTES ----------------------------------------------- */
 route.post('/product/rent', Auth, rentProduct);
-route.post('/product/upload', Auth, handleFileUpload);
+route.post("/product/upload", uploadDest.single("file"), Auth, handleFileUpload);//
 
 /* ------------------------- COMMON ROUTES ----------------- */
 
