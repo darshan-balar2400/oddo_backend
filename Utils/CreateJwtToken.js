@@ -7,7 +7,7 @@ const CreateJwtToken = CatchAsyncError(async (user, status, res) => {
     const token = await user.genereteToken();
 
     // store token in the cookie
-    res.cookie("shivay_user", token, {
+    res.cookie("user", token, {
         expires: new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365),
         secure: false,
         httpOnly: false

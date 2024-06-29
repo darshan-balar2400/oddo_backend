@@ -10,4 +10,14 @@ cloudinary.config({
     secure: true,
 });
 
+const uploadOnCloudinary = async (localFilePath, courseName, subjectName) => {
+    try {
+        fs.unlinkSync(localFilePath);
+return response.url;
+    } catch (error) {
+    console.error("Upload to Cloudinary failed:", error);
+    throw error;
+}
+};
+
 module.exports = { uploadOnCloudinary };

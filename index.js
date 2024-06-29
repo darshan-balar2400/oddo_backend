@@ -1,6 +1,6 @@
 require("dotenv").config({path:"./Config/dev.env"});
 const {UnCaughtException,UnHandledException} = require("nodejs-corekit");
-const server = require("./app");
+let server = require("./app");
 
 UnCaughtException();
 

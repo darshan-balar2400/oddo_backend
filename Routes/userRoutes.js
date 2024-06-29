@@ -4,6 +4,7 @@ const {
     LoginUser,
     LogoutUser,
     ViewProfile,
+    UpdateProfile
 } = require("../Controllers/UserController");
 const Auth = require("../Middleware/Auth");
 
@@ -15,5 +16,8 @@ route.post('/user/login', LoginUser);
 route.post("/user/logout", Auth, LogoutUser);
 /* ----------------------------------------------- GET ROUTES ----------------------------------------------- */
 route.get('/user/profile', Auth, ViewProfile);
+
+/* ----------------------------------------------- UPDATE ROUTES ----------------------------------------------- */
+route.patch("/user/profile/update", Auth, UpdateProfile);
 
 module.exports = route;

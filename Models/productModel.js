@@ -31,6 +31,9 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User"
     },
+    collection_type:{
+        type: String
+    },
     images: {
         type: [media],
         required: false,
