@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    renatal_price:
+    rental_price:
     {
         type: Number,
         required: true,
@@ -35,6 +35,8 @@ const productSchema = new mongoose.Schema({
         type: [media],
         required: true,
     }
+},{
+    timestamps:true
 });
 
 const Product = mongoose.model("Product", productSchema);
