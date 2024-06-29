@@ -34,10 +34,11 @@ const productSchema = new mongoose.Schema({
     collection_type:{
         type: String
     },
-    images: {
-        type: [media],
-        required: false,
-    }
+    images: [
+        {
+            type:String
+        }
+    ]
 },{
     timestamps:true
 });

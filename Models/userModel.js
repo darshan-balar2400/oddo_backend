@@ -45,9 +45,20 @@ const UserStructure = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
     }],
-    orders:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+    orders: [{
+        productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true
+        },
+        acquiredTime: {
+            type: String,
+            required: true
+        },
+        releaseTime: {
+            type: String,
+            required: true
+        }
     }],
     buy_cart: [{
         type: mongoose.Schema.Types.ObjectId,

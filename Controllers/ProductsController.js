@@ -5,7 +5,7 @@ const { uploadOnCloudinary } = require("../Config/cloudinary");
 const Products = require('../Models/productModel');
 const User = require("../Models/userModel");
 
-const { CatchAsyncError} = require("nodejs-corekit")
+const { CatchAsyncError,ErrorHandler} = require("nodejs-corekit")
 
 const rentProduct = CatchAsyncError(async (req, res) => {
     const user = req.user;
@@ -40,9 +40,17 @@ const rentProduct = CatchAsyncError(async (req, res) => {
 
   const handleFileUpload = async (req, res) => {
     try {
+      const id = req.params.id;
+      console.log(id);
       if (req.file) {
         const result = await uploadOnCloudinary(req.file.path);
+        
+        // let Product = await Products.findById({_id:id});
+        // Product.images = Product.images.concat(result.url);
+        // await Product.save();
+
         console.log(result);
+
         res.json({ success: true, message: "File uploaded successfully" });
       } else {
         throw new Error("No file provided in the request");
@@ -236,10 +244,73 @@ const rentProduct = CatchAsyncError(async (req, res) => {
       });
   });
 
+  const ReserveProducts = CatchAsyncError(async (req, res, next) => {
+    const { acquiredTime, releaseTime, productId } = req.body;
+    const user = req.user;
+    const product = await Products.findById(productId);
+  
+    if (!product) {
+      return next(new ErrorHandler("No product found!", 404));
+    }
+
+    const newAcquiredTime = new Date(acquiredTime).getTime();
+    const newReleaseTime = new Date(releaseTime).getTime();
+  
+    console.log(user);
+
+    console.log("new times");
+    console.log(newAcquiredTime);
+        console.log(newReleaseTime);
+
+        console.log("------")
+    // Check for overlapping bookings
+    
+    if(user.orders && user.orders.length>0){
+      const overlappingBooking = user.orders.some(order => {
+        const existingAcquiredTime = new Date(order.acquiredTime).getTime();
+        const existingReleaseTime = new Date(order.releaseTime).getTime();
+
+        console.log(existingAcquiredTime);
+        console.log(existingReleaseTime);
+  
+        if(newAcquiredTime >= existingReleaseTime && newAcquiredTime <= existingAcquiredTime) {
+          return false;
+        }
+  
+        return true;
+      });
+
+      console.log()
+      console.log(overlappingBooking);
+
+
+      if (overlappingBooking) {
+        return next(new ErrorHandler("Product is already reserved for the specified time frame", 400));
+      }
+
+    }
+  
+    // Add the new booking
+    user.orders = user.orders.concat({
+      productId: product._id,
+      acquiredTime: new Date(acquiredTime),
+      releaseTime: new Date(releaseTime)
+    });
+  
+    await user.save();
+  
+    res.json({
+      success: true,
+      message: "Product reserved successfully",
+      product
+    });
+  });
+
 module.exports = {
   rentProduct,
   handleFileUpload,
   UpdateProduct,
   DeleteProduct,
-  GetProducts
+  GetProducts,
+  ReserveProducts
 }

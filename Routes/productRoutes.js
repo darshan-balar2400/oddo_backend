@@ -18,7 +18,7 @@ const route = new express.Router();
 route.get("/products",GetProducts);
 /* ----------------------------------------------- POST ROUTES ----------------------------------------------- */
 route.post('/product/rent', Auth, rentProduct);
-route.post("/product/upload", uploadDest.single("file"), Auth, handleFileUpload);//
+route.post("/product/upload/:id", uploadDest.single("file"), Auth, handleFileUpload);
 
 /* ------------------------- COMMON ROUTES ----------------- */
 
